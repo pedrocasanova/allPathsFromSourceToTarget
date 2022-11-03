@@ -6,7 +6,6 @@ public:
         vector<int> initialNodesToVisit, nextNodesToVisit, proposedPath;
         int j = 0, lastNode = graph.size() - 1;
         initialNodesToVisit = graph[0];
-        // visit each node connected to 0
         for (int i = 0; i < initialNodesToVisit.size(); i++)
         {
             proposedPath.emplace(proposedPath.begin(), 0);
@@ -18,30 +17,25 @@ public:
             }
             else
             {
-                nextNodesToVisit = graph[i];
-                for(int k = 0; k < nextNodesToVisit.size(); k++) 
-                {
-                        cout << "next nodes to visit:  " << nextNodesToVisit[k] << endl;
-                }
-                for (int j = 0; j < nextNodesToVisit.size(); j++)
+                nextNodesToVisit = graph[initialNodesToVisit[i]];
+                proposedPath.emplace_back(initialNodesToVisit[i]);
+                while(!nextNodesToVisit.empty())
                 {
                     if (nextNodesToVisit[j] == lastNode)
                     {
                         proposedPath.emplace_back(nextNodesToVisit[j]);
                         paths.emplace_back(proposedPath);
                         proposedPath.pop_back();
-                    }
-                    else if(nextNodesToVisit.empty())
-                    {
-                        proposedPath.clear();
-                        break;
+                        nextNodesToVisit.erase(nextNodesToVisit.begin()+j);
                     }
                     else
                     {
                         proposedPath.emplace_back(nextNodesToVisit[j]);
-                        nextNodesToVisit = graph[j];
+                        nextNodesToVisit = graph[nextNodesToVisit[j]];
                     }
                 }
+                proposedPath.clear();
+                // missing case where the same initial node must be revisited (add visited vector?)
             }
         }
         return paths;
