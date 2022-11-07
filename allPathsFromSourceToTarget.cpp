@@ -3,40 +3,45 @@ public:
     vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) 
     {
         vector<vector<int>> paths;
-        vector<int> initialNodesToVisit, nextNodesToVisit, proposedPath;
-        int j = 0, lastNode = graph.size() - 1;
-        initialNodesToVisit = graph[0];
-        for (int i = 0; i < initialNodesToVisit.size(); i++)
+        vector<int> visited, stack;
+        int lastNode = graph.size()-1;
+        bool visitedFlag = false, inStackFlag = false;
+        visited.emplace_back(0);
+        stack = graph[0];
+        while(!stack.empty())
         {
-            proposedPath.emplace(proposedPath.begin(), 0);
-            if(initialNodesToVisit[i] == lastNode)
+            // loop for connected nodes of this node
+            for(int i = 0; i < graph[stack[0]].size(); i++)
             {
-                proposedPath.emplace_back(initialNodesToVisit[i]);
-                paths.emplace_back(proposedPath);
-                proposedPath.clear();
-            }
-            else
-            {
-                nextNodesToVisit = graph[initialNodesToVisit[i]];
-                proposedPath.emplace_back(initialNodesToVisit[i]);
-                while(!nextNodesToVisit.empty())
+                for(int j = 0; j < visited.size();j++)
                 {
-                    if (nextNodesToVisit[j] == lastNode)
-                    {
-                        proposedPath.emplace_back(nextNodesToVisit[j]);
-                        paths.emplace_back(proposedPath);
-                        proposedPath.pop_back();
-                        nextNodesToVisit.erase(nextNodesToVisit.begin()+j);
-                    }
-                    else
-                    {
-                        proposedPath.emplace_back(nextNodesToVisit[j]);
-                        nextNodesToVisit = graph[nextNodesToVisit[j]];
-                    }
+                    if (graph[stack[0]][i] == visited[i]) visitedFlag = true;
                 }
-                proposedPath.clear();
-                // missing case where the same initial node must be revisited (add visited vector?)
+                for(int k = 0; k < stack.size();k++)
+                {
+                    if (graph[stack[0]][i] == stack[k]) inStackFlag = false;
+                }
+                // if not visited and not in the stack already, add
+                if(visitedFlag && !inStackFlag)
+                {
+                    stack.emplace(stack.begin(), graph[stack[0]][i]);
+                }
+                // else if the node is lastNode emplace into paths
+                else if(graph[stack[0]][i] == lastNode) 
+                {
+                    paths.emplace_back(visited);    
+                }   
+                visitedFlag = false;
+                inStackFlag = false;
+                cout << " visited ";
+                for (int l = 0; l < visited.size(); l++) cout << visited[l] << " ";
+                cout << endl;
+                cout << " stack ";
+                for (int l = 0; l < stack.size(); l++) cout << stack[l] << " ";
+                cout << endl;
             }
+            visited.emplace_back(stack[0]);
+            stack.erase(stack.begin());
         }
         return paths;
     }
