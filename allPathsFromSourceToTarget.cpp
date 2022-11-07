@@ -15,14 +15,14 @@ public:
             {
                 for(int j = 0; j < visited.size();j++)
                 {
-                    if (graph[stack[0]][i] == visited[i]) visitedFlag = true;
+                    if (graph[stack[0]][i] == visited[j]) visitedFlag = true;
                 }
                 for(int k = 0; k < stack.size();k++)
                 {
                     if (graph[stack[0]][i] == stack[k]) inStackFlag = false;
                 }
                 // if not visited and not in the stack already, add
-                if(visitedFlag && !inStackFlag)
+                if(!visitedFlag && !inStackFlag)
                 {
                     stack.emplace(stack.begin(), graph[stack[0]][i]);
                 }
@@ -33,15 +33,15 @@ public:
                 }   
                 visitedFlag = false;
                 inStackFlag = false;
-                cout << " visited ";
-                for (int l = 0; l < visited.size(); l++) cout << visited[l] << " ";
-                cout << endl;
-                cout << " stack ";
-                for (int l = 0; l < stack.size(); l++) cout << stack[l] << " ";
-                cout << endl;
             }
             visited.emplace_back(stack[0]);
             stack.erase(stack.begin());
+            cout << " visited ";
+            for (int l = 0; l < visited.size(); l++) cout << visited[l] << " ";
+            cout << endl;
+            cout << " stack ";
+            for (int l = 0; l < stack.size(); l++) cout << stack[l] << " ";
+            cout << endl;
         }
         return paths;
     }
